@@ -135,9 +135,3 @@ class VAD:
 
         return ranking, {'using_dominance': found_dominance}
 
-
-vad = VAD(minmax=[1, 5], increase_interv=0.)
-r = vad.vad2categorical(5, 4, 4)
-print(r)
-
-vad.plot()
