@@ -30,11 +30,12 @@ class VAD:
         self.increase_interv = increase_interv
         self.to_plot = None
 
-    def plot(self, title, template='plotly_dark'):
+    def plot(self, title, template='plotly_dark', w=800, h=600):
         df = self.to_plot
         fig = px.scatter_3d(df, x='Valence', y='Arousal', z='Dominance',
                             color='Terms', symbol='Terms', text='Info', size='ivClosest',
-                            template=template, title=title,)
+                            template=template, title=title,
+                            height=h, width=w)
         fig.show()
 
     def __normalize(self, value: int) -> set:
