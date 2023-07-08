@@ -9,15 +9,22 @@ from pprint import pprint
  Wilton Beltré
 """
 class VAD:
-    def __init__(self, minmax=[1, 5], increase_interv=0.):
+    def __init__(self, minmax=[1, 5], increase_interv=0., mapping="Russell_Mehrabian"): # mapping="Ekman"
         """
         Simple mapper class from vad model to categorical.
         based on paper: Evidence for a Three-Factor Theory of Emotions.
+        mapping:
+                - Russell_Mehrabian categorical values (151 emotions)
+                - Ekman: 6 basic emotions
 
         """
         data = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
-        self.vad = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
-        self.terms = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
+        if mapping == "Russell_Mehrabian":
+            self.vad = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
+            self.terms = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
+        else:
+            self.vad = np.genfromtxt('./categorical_ekman.csv', delimiter=',', usecols=(1, 2, 3))
+            self.terms = np.genfromtxt('./categorical_ekman.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
 
         self.valence_mean = data[:, 0]
         self.valence_std = data[:, 1]
@@ -101,8 +108,9 @@ class VAD:
 
 
 if __name__ == "__main__":
-    v, a, d = 1, 4, 2
-    vad = VAD()
-    r = vad.vad2categorical(v, a, d, k=10)
+    v, a, d = 1, 4, 1
+    vad = VAD(mapping="Ekman")
+    # vad = VAD(mapping="Russell_Mehrabian")
+    r = vad.vad2categorical(v, a, d, k=3)
     pprint(r)
-    vad.plot(title=f"Mapping {v},{a},{d} to categorical")
+    vad.plot(title=f"Mapping {v},{a},{d} to (Ekman basic 6) categorical", w=1300, h=900)
