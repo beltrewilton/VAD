@@ -30,7 +30,8 @@ class VAD:
     def plot(self):
         df = self.to_plot
         fig = px.scatter_3d(df, x='Valence', y='Arousal', z='Dominance',
-                            color='Terms', symbol='Terms', text='Closest', size='ivClosest')
+                            color='Terms', symbol='Terms', text='Closest', size='ivClosest',
+                            template='plotly_dark')
         fig.show()
 
     def __normalize(self, value: int) -> set:
