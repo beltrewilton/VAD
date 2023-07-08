@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 from functools import reduce
 import plotly.express as px
+from pprint import pprint
+
 
 """
  Wilton Beltré
@@ -14,6 +16,7 @@ class VAD:
 
         """
         data = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
+        self.vad = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
         self.terms = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
 
         self.valence_mean = data[:, 0]
@@ -30,8 +33,9 @@ class VAD:
     def plot(self, title, template='plotly_dark'):
         df = self.to_plot
         fig = px.scatter_3d(df, x='Valence', y='Arousal', z='Dominance',
-                            color='Terms', symbol='Terms', text='Closest', size='ivClosest',
-                            template=template, title=title)
+                            color='Terms', symbol='Terms', text='Info', size='ivClosest',
+                            template=template, title=title,
+                            height=900)
         fig.show()
 
     def __normalize(self, value: int) -> set:
@@ -60,70 +64,28 @@ class VAD:
         d_inter: set = self.__normalize(d)
         return [v_inter, a_inter, d_inter]
 
-    def vad2categorical(self, v: int, a: int, d: int):
+    def vad2categorical(self, v: int, a: int, d: int, k: int = 10):
         """
-        Query intervals and return a list or posible mapping.
-        Experimental: closeness to centroid mean
+            k -> top k elements
         :param v:
         :param a:
         :param d:
+        :param k:
         :return:
         """
+        DISTANCE_COLUMN = 4
         interval = self.__intervals(v, a, d)
-
-        valence = np.argwhere(
-            (self.valence_mean > interval[0][0]) &
-            (self.valence_mean < interval[0][2])
-        ).flatten()
-        v_mask = np.abs(self.valence_mean[valence] - interval[0][1])
-        # valence = valence[v_mask.argsort()]
-
-        arousal = np.argwhere(
-            (self.arousal_mean > interval[1][0]) &
-            (self.arousal_mean < interval[1][2])
-        ).flatten()
-        a_mask = np.abs(self.arousal_mean[arousal] - interval[1][1])
-        # arousal = arousal[a_mask.argsort()]
-
-        dominan = np.argwhere(
-            (self.dominance_mean > interval[2][0]) &
-            (self.dominance_mean < interval[2][2])
-        ).flatten()
-        d_mask = np.abs(self.dominance_mean[dominan] - interval[2][1])
-        # dominan = dominan[d_mask.argsort()]
-
-        inter_set = reduce(np.intersect1d, (valence, arousal, dominan))
-
-        # Sometime dominance doesn't apport nothing :X
-        found_dominance = True
-        if len(inter_set) == 0:
-            inter_set = np.intersect1d(valence, arousal)
-            found_dominance = False
+        vad_orig = np.array([interval[0][1], interval[1][1], interval[2][1]])
+        z = np.linalg.norm(self.vad - vad_orig, axis=1)
+        t = np.hstack((self.terms[:, np.newaxis], self.vad), dtype=object)
+        z = np.hstack((t, z[:, np.newaxis]))
+        z = z[z[:, DISTANCE_COLUMN].argsort()]
 
         ranking = []
-        for i in inter_set:
-            # v_idx = np.argwhere(valence == i).flatten().item()
-            # a_idx = np.argwhere(arousal == i).flatten().item()
-            # v_val = v_mask[v_idx]
-            # a_val = a_mask[a_idx]
-            v_val = self.valence_mean[i]
-            a_val = self.arousal_mean[i]
-            d_val = 0
-            if found_dominance:
-                # d_idx = np.argwhere(dominan == i).flatten().item()
-                # d_val = d_mask[d_idx]
-                d_val = self.dominance_mean[i]
-                vad_orig = np.array([interval[0][1], interval[1][1], interval[2][1]])
-                vad_dest = np.array([v_val, a_val, d_val])
-                closest = np.linalg.norm(vad_orig - vad_dest)
-            else:
-                vad_orig = np.array([interval[0][1], interval[1][1]])
-                vad_dest = np.array([v_val, a_val])
-                closest = np.linalg.norm(vad_orig - vad_dest)
+        for m in z:
+            ranking.append({'term': m[0], 'closest': m[4], 'v': m[1], 'a': m[2], 'd': m[3]})
 
-            ranking.append({'term': self.terms[i], 'closest': closest, 'v': v_val, 'a': a_val, 'd': d_val})
-
-        ranking = sorted(ranking, key=lambda x: x['closest'])
+        ranking = ranking[:k]
 
         self.to_plot = pd.DataFrame({
             'Terms': [v['term'] for v in ranking],
@@ -131,7 +93,16 @@ class VAD:
             'Arousal': [a['a'] for a in ranking],
             'Dominance': [d['d'] for d in ranking],
             'Closest': [np.round(c['closest'], 4) for c in ranking],
+            'Info': [f"{c['term']} - {np.round(c['closest'], 4)}" for c in ranking],
         })
         self.to_plot['ivClosest'] = self.to_plot[['Closest']][::-1].reset_index(drop=True)
 
-        return ranking, {'using_dominance': found_dominance}
+        return ranking[:k], {'using_dominance': True}
+
+
+if __name__ == "__main__":
+    v, a, d = 1, 4, 2
+    vad = VAD()
+    r = vad.vad2categorical(v, a, d, k=10)
+    pprint(r)
+    vad.plot(title=f"Mapping {v},{a},{d} to categorical")
