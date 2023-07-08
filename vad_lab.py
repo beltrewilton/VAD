@@ -34,8 +34,7 @@ class VAD:
         df = self.to_plot
         fig = px.scatter_3d(df, x='Valence', y='Arousal', z='Dominance',
                             color='Terms', symbol='Terms', text='Info', size='ivClosest',
-                            template=template, title=title,
-                            height=900)
+                            template=template, title=title,)
         fig.show()
 
     def __normalize(self, value: int) -> set:
