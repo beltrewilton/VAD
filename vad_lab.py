@@ -27,11 +27,11 @@ class VAD:
         self.increase_interv = increase_interv
         self.to_plot = None
 
-    def plot(self, template='plotly_dark'):
+    def plot(self, title, template='plotly_dark'):
         df = self.to_plot
         fig = px.scatter_3d(df, x='Valence', y='Arousal', z='Dominance',
                             color='Terms', symbol='Terms', text='Closest', size='ivClosest',
-                            template=template)
+                            template=template, title=title)
         fig.show()
 
     def __normalize(self, value: int) -> set:
@@ -135,4 +135,3 @@ class VAD:
         self.to_plot['ivClosest'] = self.to_plot[['Closest']][::-1].reset_index(drop=True)
 
         return ranking, {'using_dominance': found_dominance}
-
