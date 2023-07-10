@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='vad-mapper',
+    name='vadmapper',
     version='0.0.1',
     author='Wilton Beltre',
     author_email='beltre.wilton@gmail.com',
