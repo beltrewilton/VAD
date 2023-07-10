@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 from functools import reduce
@@ -17,13 +18,14 @@ class VAD:
                 - Ekman: 6 basic emotions
 
         """
-        data = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
+        current_path = os.getcwd()
+        data = np.genfromtxt(f'{current_path}/vad/categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
         if mapping == "Russell_Mehrabian":
-            self.vad = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
-            self.terms = np.genfromtxt('./categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
+            self.vad = np.genfromtxt(f'{current_path}/vad/categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
+            self.terms = np.genfromtxt(f'{current_path}/vad/categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
         else:
-            self.vad = np.genfromtxt('./categorical_ekman.csv', delimiter=',', usecols=(1, 2, 3))
-            self.terms = np.genfromtxt('./categorical_ekman.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
+            self.vad = np.genfromtxt(f'{current_path}/vad/categorical_ekman.csv', delimiter=',', usecols=(1, 2, 3))
+            self.terms = np.genfromtxt(f'{current_path}/vad/categorical_ekman.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
 
         self.valence_mean = data[:, 0]
         self.valence_std = data[:, 1]
@@ -108,8 +110,8 @@ class VAD:
 
 if __name__ == "__main__":
     v, a, d = 1, 4, 1
-    # vad = VAD(mapping="Ekman")
-    vad = VAD(mapping="Russell_Mehrabian")
+    vad = VAD(mapping="Ekman")
+    # vad = VAD(mapping="Russell_Mehrabian")
     r = vad.vad2categorical(v, a, d, k=3)
     print(r)
-    vad.plot(title=f"Mapping {v},{a},{d} to (Russell_Mehrabian 151) categorical", w=1300, h=900)
+    # vad.plot(title=f"Mapping {v},{a},{d} to (Russell_Mehrabian 151) categorical", w=1300, h=900)
