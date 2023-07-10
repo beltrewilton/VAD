@@ -15,6 +15,7 @@ setuptools.setup(
     project_urls = {
         "Bug Tracker": "https://github.com/beltrewilton/VAD/issues"
     },
+    include_package_data = True,
     packages=['vad'],
     package_dir={'vad': 'vad'}, # the one line where all the magic happens
     package_data={
