@@ -23,7 +23,6 @@ class VAD:
         module_directory = Path(__file__).parent
         os.chdir(module_directory)
         current_path = os.getcwd()
-        print("CURRENT PATH:", current_path)
 
         data = np.genfromtxt(f'{current_path}/categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
         if mapping == "Russell_Mehrabian":
