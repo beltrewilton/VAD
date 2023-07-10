@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import numpy as np
 import pandas as pd
 from functools import reduce
@@ -18,14 +19,19 @@ class VAD:
                 - Ekman: 6 basic emotions
 
         """
+
+        module_directory = Path(__file__).parent
+        os.chdir(module_directory)
         current_path = os.getcwd()
-        data = np.genfromtxt(f'{current_path}/vad/categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
+        print("CURRENT PATH:", current_path)
+
+        data = np.genfromtxt(f'{current_path}/categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
         if mapping == "Russell_Mehrabian":
-            self.vad = np.genfromtxt(f'{current_path}/vad/categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
-            self.terms = np.genfromtxt(f'{current_path}/vad/categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
+            self.vad = np.genfromtxt(f'{current_path}/categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
+            self.terms = np.genfromtxt(f'{current_path}/categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
         else:
-            self.vad = np.genfromtxt(f'{current_path}/vad/categorical_ekman.csv', delimiter=',', usecols=(1, 2, 3))
-            self.terms = np.genfromtxt(f'{current_path}/vad/categorical_ekman.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
+            self.vad = np.genfromtxt(f'{current_path}/categorical_ekman.csv', delimiter=',', usecols=(1, 2, 3))
+            self.terms = np.genfromtxt(f'{current_path}/categorical_ekman.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
 
         self.valence_mean = data[:, 0]
         self.valence_std = data[:, 1]
