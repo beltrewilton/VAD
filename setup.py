@@ -16,7 +16,7 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/beltrewilton/VAD/issues"
     },
     package_data={
-      'vadmapper': ['*.csv'],
+      'vadmapper': ['vad/*.csv'],
     },
     include_package_data=True,
     license='MIT',
