@@ -16,6 +16,6 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/beltrewilton/VAD/issues"
     },
     license='MIT',
-    packages=['VAD'],
+    # packages=['VAD'],
     install_requires=['numpy', 'pandas', 'plotly', 'pprint'],
 )
