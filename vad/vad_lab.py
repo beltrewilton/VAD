@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 from functools import reduce
 import plotly.express as px
-from pprint import pprint
 
 
 """
@@ -112,5 +111,5 @@ if __name__ == "__main__":
     # vad = VAD(mapping="Ekman")
     vad = VAD(mapping="Russell_Mehrabian")
     r = vad.vad2categorical(v, a, d, k=3)
-    pprint(r)
+    print(r)
     vad.plot(title=f"Mapping {v},{a},{d} to (Russell_Mehrabian 151) categorical", w=1300, h=900)

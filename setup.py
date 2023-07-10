@@ -17,5 +17,5 @@ setuptools.setup(
     },
     license='MIT',
     packages=['vad'],
-    install_requires=['numpy', 'pandas', 'plotly', 'pprint'],
+    install_requires=['numpy', 'pandas', 'plotly'],
 )
