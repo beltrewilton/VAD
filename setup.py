@@ -12,14 +12,14 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/beltrewilton/VAD',
-    project_urls = {
+    project_urls={
         "Bug Tracker": "https://github.com/beltrewilton/VAD/issues"
     },
-    include_package_data = True,
+    include_package_data=True,
     packages=['vad'],
     package_dir={'vad': 'vad'}, # the one line where all the magic happens
     package_data={
-      'myapp': ['*.csv'],
+      'vad': ['*.csv'],
     },
     license='MIT',
     install_requires=['numpy', 'pandas', 'plotly'],
