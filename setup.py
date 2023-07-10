@@ -15,6 +15,10 @@ setuptools.setup(
     project_urls = {
         "Bug Tracker": "https://github.com/beltrewilton/VAD/issues"
     },
+    package_data={
+      'vadmapper': ['*.csv'],
+    },
+    include_package_data=True,
     license='MIT',
     packages=['vad'],
     install_requires=['numpy', 'pandas', 'plotly'],
