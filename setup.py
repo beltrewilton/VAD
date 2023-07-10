@@ -15,8 +15,9 @@ setuptools.setup(
     project_urls = {
         "Bug Tracker": "https://github.com/beltrewilton/VAD/issues"
     },
+    package_dir={'vad':'vad'}, # the one line where all the magic happens
     package_data={
-      'vadmapper': ['vad/*.csv'],
+      'myapp': ['*.csv'],
     },
     license='MIT',
     packages=['vad'],
