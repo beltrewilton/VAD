@@ -19,7 +19,7 @@ setuptools.setup(
     packages=['vad'],
     package_dir={'vad': 'vad'}, # the one line where all the magic happens
     package_data={
-      'myapp': ['vad/*.csv'],
+      'myapp': ['*.csv'],
     },
     license='MIT',
     install_requires=['numpy', 'pandas', 'plotly'],
