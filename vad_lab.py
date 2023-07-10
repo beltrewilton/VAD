@@ -109,8 +109,8 @@ class VAD:
 
 if __name__ == "__main__":
     v, a, d = 1, 4, 1
-    vad = VAD(mapping="Ekman")
-    # vad = VAD(mapping="Russell_Mehrabian")
+    # vad = VAD(mapping="Ekman")
+    vad = VAD(mapping="Russell_Mehrabian")
     r = vad.vad2categorical(v, a, d, k=3)
     pprint(r)
-    vad.plot(title=f"Mapping {v},{a},{d} to (Ekman basic 6) categorical", w=1300, h=900)
+    vad.plot(title=f"Mapping {v},{a},{d} to (Russell_Mehrabian 151) categorical", w=1300, h=900)
