@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name='vadmapper',
-    version='0.0.2',
+    version='0.0.3',
     author='Wilton Beltre',
     author_email='beltre.wilton@gmail.com',
     description='Simple mapper class from vad model to categorical.',

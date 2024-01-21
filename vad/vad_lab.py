@@ -81,9 +81,10 @@ class VAD:
         d_inter: set = self.__normalize(d)
         return [v_inter, a_inter, d_inter]
 
-    def vad2categorical(self, v: int, a: int, d: int, k: int = 10):
+    def vad2categorical(self, v: int, a: int, d: int, k: int = 10, use_plot: bool = False):
         """
             k -> top k elements
+        :param use_plot:
         :param v:
         :param a:
         :param d:
@@ -104,15 +105,16 @@ class VAD:
 
         ranking = ranking[:k]
 
-        self.to_plot = pd.DataFrame({
-            'Terms': [v['term'] for v in ranking],
-            'Valence': [v['v'] for v in ranking],
-            'Arousal': [a['a'] for a in ranking],
-            'Dominance': [d['d'] for d in ranking],
-            'Closest': [np.round(c['closest'], 4) for c in ranking],
-            'Info': [f"{c['term']} - {np.round(c['closest'], 4)}" for c in ranking],
-        })
-        self.to_plot['ivClosest'] = self.to_plot[['Closest']][::-1].reset_index(drop=True)
+        if use_plot:
+            self.to_plot = pd.DataFrame({
+                'Terms': [v['term'] for v in ranking],
+                'Valence': [v['v'] for v in ranking],
+                'Arousal': [a['a'] for a in ranking],
+                'Dominance': [d['d'] for d in ranking],
+                'Closest': [np.round(c['closest'], 4) for c in ranking],
+                'Info': [f"{c['term']} - {np.round(c['closest'], 4)}" for c in ranking],
+            })
+            self.to_plot['ivClosest'] = self.to_plot[['Closest']][::-1].reset_index(drop=True)
 
         return ranking[:k], {'using_dominance': True}
 
