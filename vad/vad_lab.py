@@ -16,6 +16,7 @@ class VAD:
         based on paper: Evidence for a Three-Factor Theory of Emotions.
         mapping:
                 - Russell_Mehrabian categorical values (151 emotions)
+                - OCC: Translation of the ALMA model,  A Layered Model of Affect part of the Virtual Human Project
                 - Ekman: 6 basic emotions
 
         """
@@ -28,6 +29,9 @@ class VAD:
         if mapping == "Russell_Mehrabian":
             self.vad = np.genfromtxt(f'{current_path}/categorial_vad.csv', delimiter=',', usecols=(2, 4, 6))
             self.terms = np.genfromtxt(f'{current_path}/categorial_vad.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
+        elif mapping == "OCC":
+            self.vad = np.genfromtxt(f'{current_path}/categorical_occ.csv', delimiter=',', usecols=(1, 2, 3))
+            self.terms = np.genfromtxt(f'{current_path}/categorical_occ.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
         else:
             self.vad = np.genfromtxt(f'{current_path}/categorical_ekman.csv', delimiter=',', usecols=(1, 2, 3))
             self.terms = np.genfromtxt(f'{current_path}/categorical_ekman.csv', delimiter=',', usecols=(0), dtype=None, encoding='utf-8-sig')
