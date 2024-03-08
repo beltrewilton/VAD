@@ -21,9 +21,7 @@ class VAD:
 
         """
 
-        module_directory = Path(__file__).parent
-        os.chdir(module_directory)
-        current_path = os.getcwd()
+        current_path = Path(__file__).parent.__str__()
 
         data = np.genfromtxt(f'{current_path}/categorial_vad.csv', delimiter=',', usecols=(2, 3, 4, 5, 6, 7))
         if mapping == "Russell_Mehrabian":
@@ -100,8 +98,10 @@ class VAD:
         z = z[z[:, DISTANCE_COLUMN].argsort()]
 
         ranking = []
-        for m in z:
-            ranking.append({'term': m[0], 'closest': m[4], 'v': m[1], 'a': m[2], 'd': m[3]})
+        for i, m in enumerate(z):
+            if i == k and not use_plot: break
+            idx = np.where(self.terms == m[0])[0][0]
+            ranking.append({'term': m[0], 'index': idx, 'closest': m[4], 'v': m[1], 'a': m[2], 'd': m[3]})
 
         ranking = ranking[:k]
 
@@ -121,8 +121,9 @@ class VAD:
 
 if __name__ == "__main__":
     v, a, d = 1, 4, 1
-    vad = VAD(mapping="Ekman")
-    # vad = VAD(mapping="Russell_Mehrabian")
-    r = vad.vad2categorical(v, a, d, k=3)
+    # vad = VAD(mapping="Ekman")
+    vad = VAD(minmax=[-100, 100], mapping="OCC")
+    # r = vad.vad2categorical(5.99, 42.59, 22.3, k=1, use_plot=False)
+    r = vad.vad2categorical(5.99, 42.59, 22.3, k=3, use_plot=False)
     print(r)
     # vad.plot(title=f"Mapping {v},{a},{d} to (Russell_Mehrabian 151) categorical", w=1300, h=900)
