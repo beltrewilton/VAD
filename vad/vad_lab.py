@@ -100,7 +100,7 @@ class VAD:
         ranking = []
         for i, m in enumerate(z):
             if i == k and not use_plot: break
-            idx = np.where(self.terms == m[0])[0][0]
+            idx = np.where(self.terms == m[0])[0][0] + 1 # 0 in CTC is 'the blank'
             ranking.append({'term': m[0], 'index': idx, 'closest': m[4], 'v': m[1], 'a': m[2], 'd': m[3]})
 
         ranking = ranking[:k]
